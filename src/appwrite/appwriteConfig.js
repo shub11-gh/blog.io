@@ -10,7 +10,7 @@ export class Service {
             .setEndpoint(config.appwriteUrl)
             .setProject(config.appwriteProjectId);
         this.databases = new Databases(this.client);
-        this.bucket = new Storage(this.bucket);
+        this.bucket = new Storage(this.client);
     }
 
     async createPost({ title, slug, content, featuredImage, status, userId }) {
@@ -54,7 +54,7 @@ export class Service {
 
     async deletePost(slug) {
         try {
-            await this.databases.updateDocument(
+            await this.databases.deleteDocument(
                 config.appwriteDatabaseId,
                 config.appwriteCollectionId,
                 slug
@@ -81,7 +81,7 @@ export class Service {
         }
     }
 
-    async getPost(queries = [Query.equal('status', 'active'), Query.limit(10)]) {
+    async getPosts(queries = [Query.equal('status', 'active'), Query.limit(10)]) {
         try {
             return await this.databases.listDocuments(
                 config.appwriteDatabaseId,
@@ -112,7 +112,7 @@ export class Service {
     // file delete service
     async deleteFile(fileId) {
         try {
-            await this.bucket.createFile(
+            await this.bucket.deleteFile(
                 config.appwriteBucketId,
                 fileId
             )
@@ -125,7 +125,7 @@ export class Service {
 
     // file preview service
     getFilePreview(fileId) {
-        return this.bucket.getFilePreview(
+        return this.bucket.getFileView(
             config.appwriteBucketId,
             fileId
         )

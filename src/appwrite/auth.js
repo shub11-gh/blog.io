@@ -18,7 +18,7 @@ export class AuthService {
             const userAccount = await this.account.create(ID.unique(), email, password, name);
             if (userAccount) {
                 // call another method - directly login after sign-up
-                return this.login(email, password);
+                return this.login({ email, password });
             }
             else {
                 return userAccount;
@@ -41,6 +41,9 @@ export class AuthService {
             return await this.account.get();
         }
         catch (error) {
+            if (error?.code === 401) {
+                return null;
+            }
             console.log("Appwrite :: getCurrentUser :: error ", error);
             return null;
         }

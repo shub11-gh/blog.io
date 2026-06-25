@@ -16,7 +16,7 @@ function App() {
   // console.log(import.meta.env.VITE_APPWRITE_URL);
 
   console.log(config.appwriteProjectId);
-  console.log(config.aappwriteUrl);
+  console.log(config.appwriteUrl);
 
   const [loading, setLoading] = useState(true)
   const dispatch = useDispatch()
@@ -31,9 +31,9 @@ function App() {
           dispatch(logout())
         }
       })
-      .finally(
+      .finally(() => {
         setLoading(false)
-      )
+      })
   }, [])
 
 
@@ -42,7 +42,7 @@ function App() {
       <div className="w-full flex flex-col items-center justify-center">
         <Header />
         <main>
-          TODO:{/* <Outlet /> */}
+          <Outlet />
         </main>
         <Footer />
       </div>
