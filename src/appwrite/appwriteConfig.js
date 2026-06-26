@@ -5,6 +5,7 @@ export class Service {
     client = new Client();
     databases;
     bucket;
+
     constructor() {
         this.client
             .setEndpoint(config.appwriteUrl)
@@ -27,8 +28,7 @@ export class Service {
                     userId
                 }
             )
-        }
-        catch (error) {
+        } catch (error) {
             throw error;
         }
     }
@@ -46,8 +46,7 @@ export class Service {
                     status
                 }
             )
-        }
-        catch (error) {
+        } catch (error) {
             throw error;
         }
     }
@@ -60,10 +59,8 @@ export class Service {
                 slug
             )
             return true;
-        }
-        catch (error) {
+        } catch (error) {
             throw error;
-            return false;
         }
     }
 
@@ -74,10 +71,8 @@ export class Service {
                 config.appwriteCollectionId,
                 slug
             )
-        }
-        catch (error) {
+        } catch (error) {
             throw error;
-            return false;
         }
     }
 
@@ -88,10 +83,8 @@ export class Service {
                 config.appwriteCollectionId,
                 queries
             )
-        }
-        catch (error) {
+        } catch (error) {
             throw error;
-            return false;
         }
     }
 
@@ -104,8 +97,9 @@ export class Service {
                 file
             )
         } catch (error) {
-            console.log("Appwrite service :: uploadFile :: error", error);
-            return false;
+            // Re-throw so the caller (PostForm) can display the real Appwrite error
+            console.error("Appwrite service :: uploadFile :: error", error);
+            throw error;
         }
     }
 

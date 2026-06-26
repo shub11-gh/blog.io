@@ -17,10 +17,17 @@ const Input = React.forwardRef(function Input({
             }
             <input
                 type={type}
-                className={`px-3 py-2 rounded-lg bg-white text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
+                className={`px-3 py-2 rounded-lg bg-white text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}
+                file:mr-4 file:py-1.5 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-gray-200 file:text-gray-800
+                file:cursor-pointer hover:file:bg-gray-300
+                text-sm cursor-pointer outline-none border-2 border-black`}
                 ref={ref}
                 {...props}
                 id={id}
+
             />
         </div>
     )

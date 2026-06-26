@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Input, Select, RTE } from '../index'
 import appwriteService from '../../appwrite/appwriteConfig'
@@ -9,47 +9,76 @@ function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
         defaultValues: {
             title: post?.title || '',
-            slug: post?.slug || '',
+            slug: post?.$id || '',
             content: post?.content || '',
-            status: post?.status || '',
+            status: post?.status || 'active',
         }
     })
 
     const navigate = useNavigate()
     const userData = useSelector(state => state.auth?.userData)
+    const [error, setError] = useState('')
+    const [submitting, setSubmitting] = useState(false)
 
     const submit = async (data) => {
-        if (post) {
-            const file = data.image[0] ? appwriteService.uploadFile(data.image[0]) : null
+        setError('')
+        setSubmitting(true)
 
-            if (file) {
-                appwriteService.deleteFile(post.featuredImage)
+        // Client-side file validation before hitting Appwrite
+        if (data.image[0]) {
+            const file = data.image[0]
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp']
+            const maxSizeMB = 5
+
+            if (!allowedTypes.includes(file.type)) {
+                setError(`File type "${file.type}" is not allowed. Please upload PNG, JPG, GIF or WebP.`)
+                setSubmitting(false)
+                return
             }
-
-            const dbPost = await appwriteService.updatePost(post.$id, {
-                ...data,
-                featuredImage: file ? file.$id : undefined
-            })
-
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`)
+            if (file.size > maxSizeMB * 1024 * 1024) {
+                setError(`File is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum allowed size is ${maxSizeMB} MB.`)
+                setSubmitting(false)
+                return
             }
         }
-        else {
-            const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null
 
-            if (file && userData?.$id) {
-                const fileId = file.$id
-                data.featuredImage = fileId
-                const dbPost = await appwriteService.createPost({
+        try {
+            if (post) {
+                const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null
+
+                if (file) {
+                    appwriteService.deleteFile(post.featuredImage)
+                }
+
+                const dbPost = await appwriteService.updatePost(post.$id, {
                     ...data,
-                    userId: userData.$id
+                    featuredImage: file ? file.$id : undefined
                 })
 
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`)
                 }
             }
+            else {
+                const uploadedFile = await appwriteService.uploadFile(data.image[0])
+
+                if (userData?.$id) {
+                    data.featuredImage = uploadedFile.$id
+                    const dbPost = await appwriteService.createPost({
+                        ...data,
+                        userId: userData.$id
+                    })
+
+                    if (dbPost) {
+                        navigate(`/post/${dbPost.$id}`)
+                    }
+                }
+            }
+        } catch (err) {
+            console.error('PostForm submit error:', err)
+            setError(err?.message || 'Something went wrong. Please try again.')
+        } finally {
+            setSubmitting(false)
         }
     }
 
@@ -59,9 +88,11 @@ function PostForm({ post }) {
             return value
                 .trim()
                 .toLowerCase()
-                .replace(/[^a-zA-Z\d\s]+/g, '-')
-                .replace(/\s+/g, '-')
-
+                .replace(/[^a-z0-9\s-]/g, '')     // remove special chars
+                .replace(/\s+/g, '-')             // spaces → hyphens
+                .replace(/-+/g, '-')              // collapse consecutive hyphens
+                .replace(/^-+|-+$/g, '')          // strip leading/trailing hyphens
+                .substring(0, 36)                 // Appwrite max ID length
 
         return ''
     }, [])
@@ -117,13 +148,22 @@ function PostForm({ post }) {
                     </div>
                 )}
                 <Select
-                    options={["active", "inactive"]}
+                    options={["Active", "Inactive"]}
+                    value="Active"
                     label="Status"
-                    className="mb-4"
+                    className="mb-4 cursor-pointer"
                     {...register("status", { required: true })}
                 />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-                    {post ? "Update" : "Submit"}
+                {error && (
+                    <p className="text-red-600 text-sm mb-3 text-center font-medium">{error}</p>
+                )}
+                <Button
+                    type="submit"
+                    bgColor={post ? "bg-green-700" : undefined}
+                    className="w-full"
+                    disabled={submitting}
+                >
+                    {submitting ? (post ? 'Updating...' : 'Submitting...') : (post ? 'Update' : 'Submit')}
                 </Button>
             </div>
         </form>

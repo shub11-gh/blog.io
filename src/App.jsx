@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import authService from './appwrite/auth'
 import { login, logout } from './features/authSlice'
-import { set } from "react-hook-form"
 import { Outlet } from "react-router-dom"
 import { Footer, Header } from './components'
 import config from "./config/config"
@@ -38,14 +37,12 @@ function App() {
 
 
   return !loading ? (
-    <div className="min-h-screen flex flex-wrap content-between bg-gray-200">
-      <div className="w-full flex flex-col items-center justify-center">
-        <Header />
-        <main>
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <Header />
+      <main className="w-full grow">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   ) : null
 }

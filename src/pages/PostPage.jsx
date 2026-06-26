@@ -4,6 +4,9 @@ import appwriteService from "../appwrite/appwriteConfig";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { Trash2Icon, PencilIcon } from 'lucide-react';
+
+
 
 function PostPage() {
     const [post, setPost] = useState(null);
@@ -43,14 +46,14 @@ function PostPage() {
                     />
 
                     {isAuthor && (
-                        <div className="absolute right-6 top-6">
+                        <div className="absolute right-6 top-6 flex flex-row gap-3">
                             <Link to={`/edit-post/${post.$id}`}>
-                                <Button bgColor="bg-green-500" className="mr-3">
-                                    Edit
+                                <Button bgColor="bg-green-600" className="mr-3 flex">
+                                    <PencilIcon /><span className="ml-2">Edit</span>
                                 </Button>
                             </Link>
-                            <Button bgColor="bg-red-500" onClick={deletePost}>
-                                Delete
+                            <Button bgColor="bg-red-600" onClick={deletePost} className="mr-3 flex">
+                                <Trash2Icon /><span className="ml-2">Delete</span>
                             </Button>
                         </div>
                     )}
