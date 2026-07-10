@@ -18,7 +18,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [About](#-about)
 - [Features](#-features)
@@ -33,7 +33,7 @@
 
 ---
 
-## 🧾 About
+## About
 
 **Blog.io** is a feature-rich blogging application that empowers users to create, publish, and manage blog posts through an intuitive interface. It leverages **Appwrite** as its Backend-as-a-Service for authentication, database operations, and file storage — eliminating the need for a custom backend while maintaining production-grade security and scalability.
 
@@ -41,23 +41,23 @@ The platform is designed with a clean component architecture, centralized state 
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---|---|
-| 🔐 **Authentication** | Secure email/password signup & login with session management via Appwrite |
-| 📝 **Rich Text Editor** | Full-featured content editor powered by TinyMCE with toolbar customization |
-| 🖼️ **Image Management** | Upload, preview, and replace featured images with client-side validation (type & size) |
-| 🔄 **Full CRUD** | Create, read, update, and delete blog posts with real-time slug auto-generation |
-| 🛡️ **Author-only Actions** | Edit and delete buttons visible only to the post's author |
-| 🚪 **Protected Routes** | `AuthLayout` component guards routes based on authentication state |
-| 📦 **Global State** | Centralized auth state management with Redux Toolkit |
-| 🎨 **Modern UI** | Clean, responsive interface built with Tailwind CSS v4 |
-| ⚡ **Blazing Fast** | Vite-powered dev server with HMR for instant feedback |
+| **Authentication** | Secure email/password signup & login with session management via Appwrite |
+| **Rich Text Editor** | Full-featured content editor powered by TinyMCE with toolbar customization |
+| **Image Management** | Upload, preview, and replace featured images with client-side validation (type & size) |
+| **Full CRUD** | Create, read, update, and delete blog posts with real-time slug auto-generation |
+| **Author-only Actions** | Edit and delete buttons visible only to the post's author |
+| **Protected Routes** | `AuthLayout` component guards routes based on authentication state |
+| **Global State** | Centralized auth state management with Redux Toolkit |
+| **Modern UI** | Clean, responsive interface built with Tailwind CSS v4 |
+| **Blazing Fast** | Vite-powered dev server with HMR for instant feedback |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 | Technology | Purpose |
@@ -78,7 +78,7 @@ The platform is designed with a clean component architecture, centralized state 
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -107,7 +107,7 @@ The platform is designed with a clean component architecture, centralized state 
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -140,11 +140,11 @@ The platform is designed with a clean component architecture, centralized state 
    - Create a **Database** with a collection containing these attributes:
      | Attribute | Type | Required |
      |-----------|------|----------|
-     | `title` | String | ✅ |
-     | `content` | String | ✅ |
-     | `featuredImage` | String | ✅ |
-     | `status` | String | ✅ |
-     | `userId` | String | ✅ |
+     | `title` | String | Yes |
+     | `content` | String | Yes |
+     | `featuredImage` | String | Yes |
+     | `status` | String | Yes |
+     | `userId` | String | Yes |
    - Create a **Storage bucket** for image uploads
    - Configure appropriate **permissions** on the collection and bucket
 
@@ -160,7 +160,7 @@ The platform is designed with a clean component architecture, centralized state 
 
 ---
 
-## 🔑 Environment Variables
+## Environment Variables
 
 Create a `.env` file in the root directory with the following variables:
 
@@ -176,7 +176,7 @@ VITE_TINY_MCE_ID=""               # TinyMCE editor API key
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 blog.io/
